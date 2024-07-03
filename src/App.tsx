@@ -1,13 +1,16 @@
 import './index.css'
+import { Provider } from 'react-redux';
+import store from './services/store';
+import Nav from "./components/Nav";
+import UserList from "./components/UserList";
 
-function App() {
+const App: React.FC = () => {
 
   return (
-    <>
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>    
-    </>
+    <Provider store={store}>
+      <Nav />
+      <UserList />
+    </Provider>
   )
 }
 
