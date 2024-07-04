@@ -37,7 +37,7 @@ const UserList: React.FC = () => {
       }
     >
       {users.map((user) => (
-        <div key={user.id} className="flex items-center border border-b-gray-300 rounded p-2 space-x-2">
+        <div key={user.id} className="flex min-h-[10vh] items-center border border-b-gray-300 rounded p-2 space-x-2">
           <img src={user.image} alt={user.name} className="w-8 h-8 object-cover rounded-full" />
           <div className="flex flex-col">
             <p className="text-xl font-semibold">{user.name}</p>
