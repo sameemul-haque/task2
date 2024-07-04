@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { db } from './firebase';
+import { db } from './firebaseConfig';
 import { collection, getDocs, orderBy, query, startAfter, limit } from 'firebase/firestore';
 
 interface User {
@@ -38,6 +38,7 @@ export const fetchUsers: any = createAsyncThunk('users/fetchUsers', async ({ las
   const hasMoreData = querySnapshot.docs.length === limitCount;
   return { usersData, lastVisibleDoc, hasMoreData };
 });
+
 const usersSlice = createSlice({
   name: 'users',
   initialState,

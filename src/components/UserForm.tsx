@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db, storage } from '../services/firebase';
+import { db, storage } from '../services/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,7 +27,7 @@ const UserForm: React.FC = () => {
     };
 
     const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const age = e.target.validity.valid ? e.target.value : '';
+        const age = e.target.validity.valid ? e.target.value : e.target.value.replace(/[^0-9]/g,"");
         setAge(age);
     };
 
@@ -46,7 +46,7 @@ const UserForm: React.FC = () => {
 
             const docRef = await addDoc(collection(db, 'usersdata'), {
                 name,
-                age: parseInt(age, 10),
+                age,
                 image: imageUrl,
                 timestamp,
             });
@@ -54,7 +54,7 @@ const UserForm: React.FC = () => {
             dispatch(addUser({
                 id: docRef.id,
                 name,
-                age: parseInt(age, 10),
+                age,
                 image: imageUrl,
                 timestamp,
             }));
