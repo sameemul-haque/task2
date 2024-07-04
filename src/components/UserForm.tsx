@@ -5,6 +5,8 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../services/usersSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserForm: React.FC = () => {
     const [name, setName] = useState('');
@@ -63,7 +65,8 @@ const UserForm: React.FC = () => {
             setAge('');
             setImage(null);
             setImagePreview(null);
-            alert('Data added');
+            toast("Data added successfully!", { type: 'success' });
+            // alert('Data added');
         } catch (error) {
             console.error('Error: ', error);
         } finally {
@@ -117,6 +120,7 @@ const UserForm: React.FC = () => {
             <button type="submit" className="w-full md:w-80 lg:w-80 py-2 px-4 bg-blue-600 hover:bg-blue-800 text-white font-semibold rounded outline-none">
                 {loading ? "Loading..." : "Submit"}
             </button>
+            <ToastContainer />
         </form>
     );
 };
