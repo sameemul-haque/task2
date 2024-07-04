@@ -25,9 +25,9 @@ const initialState: UsersState = {
 };
 
 export const fetchUsers: any = createAsyncThunk('users/fetchUsers', async ({ lastVisible, limitCount }: { lastVisible: any, limitCount: number }) => {
-  let q = query(collection(db, 'usersdata'), orderBy('timestamp'), limit(limitCount));
+  let q = query(collection(db, 'usersdata'), orderBy('timestamp', 'desc'), limit(limitCount));
   if (lastVisible) {
-    q = query(collection(db, 'usersdata'), orderBy('timestamp'), startAfter(lastVisible), limit(limitCount));
+    q = query(collection(db, 'usersdata'), orderBy('timestamp', 'desc'), startAfter(lastVisible), limit(limitCount));
   }
   const querySnapshot = await getDocs(q);
   const usersData = querySnapshot.docs.map((doc) => ({
@@ -38,13 +38,12 @@ export const fetchUsers: any = createAsyncThunk('users/fetchUsers', async ({ las
   const hasMoreData = querySnapshot.docs.length === limitCount;
   return { usersData, lastVisibleDoc, hasMoreData };
 });
-
 const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
     addUser(state, action) {
-      state.users.push(action.payload);
+      state.users.unshift(action.payload);
     },
   },
   extraReducers: (builder) => {
