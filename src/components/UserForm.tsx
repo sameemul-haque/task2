@@ -37,11 +37,13 @@ const UserForm: React.FC = () => {
         try {
             await uploadBytes(storageRef, image);
             const imageUrl = await getDownloadURL(storageRef);
+            const timestamp = Date.now();
 
             const docRef = await addDoc(collection(db, 'usersdata'), {
                 name,
                 age,
                 image: imageUrl,
+                timestamp,
             });
 
             dispatch(addUser({
@@ -49,6 +51,7 @@ const UserForm: React.FC = () => {
                 name,
                 age,
                 image: imageUrl,
+                timestamp,
             }));
 
             setName('');
@@ -72,7 +75,7 @@ const UserForm: React.FC = () => {
                     accept="image/*"
                     onChange={handleImageChange}
                     className="hidden"
-                    // required
+                // required
                 />
                 <label
                     htmlFor="file-input"

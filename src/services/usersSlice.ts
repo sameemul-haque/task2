@@ -7,6 +7,7 @@ interface User {
   name: string;
   age: number;
   image: string;
+  timestamp: number;
 }
 
 interface UsersState {
@@ -20,7 +21,7 @@ const initialState: UsersState = {
 };
 
 export const fetchUsers: any = createAsyncThunk('users/fetchUsers', async () => {
-  const q = query(collection(db, 'usersdata'), orderBy('name'));
+  const q = query(collection(db, 'usersdata'), orderBy('timestamp'));
   const querySnapshot = await getDocs(q);
   const usersData = querySnapshot.docs.map((doc) => ({
     id: doc.id,
