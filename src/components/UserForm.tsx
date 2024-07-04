@@ -8,7 +8,7 @@ import { addUser } from '../services/usersSlice';
 
 const UserForm: React.FC = () => {
     const [name, setName] = useState('');
-    const [age, setAge] = useState<number | ''>('');
+    const [age, setAge] = useState('');
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -26,6 +26,11 @@ const UserForm: React.FC = () => {
         }
     };
 
+    const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const age = e.target.validity.valid ? e.target.value : '';
+        setAge(age);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!image) { alert('Please select an image'); return; }
@@ -41,7 +46,7 @@ const UserForm: React.FC = () => {
 
             const docRef = await addDoc(collection(db, 'usersdata'), {
                 name,
-                age,
+                age: parseInt(age, 10),
                 image: imageUrl,
                 timestamp,
             });
@@ -49,7 +54,7 @@ const UserForm: React.FC = () => {
             dispatch(addUser({
                 id: docRef.id,
                 name,
-                age,
+                age: parseInt(age, 10),
                 image: imageUrl,
                 timestamp,
             }));
@@ -75,7 +80,7 @@ const UserForm: React.FC = () => {
                     accept="image/*"
                     onChange={handleImageChange}
                     className="hidden"
-                // required
+                    // required
                 />
                 <label
                     htmlFor="file-input"
@@ -101,9 +106,10 @@ const UserForm: React.FC = () => {
             <div>
                 <label className="block text-sm font-medium text-gray-700">Age</label>
                 <input
-                    type="number"
+                    type="text"
+                    pattern="[0-9]*"
                     value={age}
-                    onChange={(e) => setAge(e.target.value ? parseInt(e.target.value, 10) : '')}
+                    onChange={handleAgeChange}
                     className="mt-1 block w-full md:w-80 lg:w-80 p-2 border border-gray-300 rounded"
                     required
                 />
