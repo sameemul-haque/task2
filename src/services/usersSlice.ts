@@ -13,13 +13,15 @@ interface User {
 interface UsersState {
   users: User[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  lastVisible: any; 
+  lastVisible: any;
+  hasMoreData: boolean;
 }
 
 const initialState: UsersState = {
   users: [],
   status: 'idle',
   lastVisible: null,
+  hasMoreData: true,
 };
 
 export const fetchUsers: any = createAsyncThunk('users/fetchUsers', async ({ lastVisible, limitCount }: { lastVisible: any, limitCount: number }) => {
@@ -33,7 +35,8 @@ export const fetchUsers: any = createAsyncThunk('users/fetchUsers', async ({ las
     ...doc.data(),
   })) as User[];
   const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-  return { usersData, lastVisibleDoc };
+  const hasMoreData = querySnapshot.docs.length === limitCount;
+  return { usersData, lastVisibleDoc, hasMoreData };
 });
 
 const usersSlice = createSlice({
@@ -56,6 +59,7 @@ const usersSlice = createSlice({
         );
         state.users = [...state.users, ...newUsers];
         state.lastVisible = action.payload.lastVisibleDoc;
+        state.hasMoreData = action.payload.hasMoreData;
       })
       .addCase(fetchUsers.rejected, (state) => {
         state.status = 'failed';
